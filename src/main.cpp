@@ -74,13 +74,13 @@ str to_UTF8(wstr_view wide_str)
     auto utf8_str = str(size, '\0');
 
     WideCharToMultiByte(
-        CP_UTF8, 
-        0, 
-        wide_str.data(), 
+        CP_UTF8,
+        0,
+        wide_str.data(),
         wide_str.size(),
         utf8_str.data(),
-        size, 
-        nullptr, 
+        size,
+        nullptr,
         nullptr
     );
 
@@ -93,11 +93,11 @@ wstr to_UTF16(str_view utf8_str)
         return L"";
 
     int size = MultiByteToWideChar(
-        CP_UTF8, 
-        0, 
+        CP_UTF8,
+        0,
         utf8_str.data(),
         utf8_str.size(),
-        nullptr, 
+        nullptr,
         0);
 
     if (size == 0)
@@ -106,10 +106,10 @@ wstr to_UTF16(str_view utf8_str)
     wstr wide_str(size, L'\0');
 
     MultiByteToWideChar(
-        CP_UTF8, 
-        0, 
+        CP_UTF8,
+        0,
         utf8_str.data(),
-        utf8_str.size(), 
+        utf8_str.size(),
         wide_str.data(),
         size);
 
@@ -131,7 +131,7 @@ str last_error_as_string(DWORD last_error)
         buffer.size(),
         NULL);
 
-    return to_UTF8(wstr(buffer.data()));
+    return to_UTF8({buffer.data(), size});
 }
 
 
@@ -208,7 +208,7 @@ vec<str> getDeviceNameForVolume(str volume)
     while (*dd)
     {
         res.push_back(to_UTF8({dd, wcslen(dd)}));
-        
+
         dd += wcslen(dd) + 1;
     }
 
